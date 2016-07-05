@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TimeSheet
 {
-    //TODO: Handle Editing Hours
+    
     public enum TimeEntryTypes { SICK, VACATION, REGULAR,
         UNDEFINDED
     }
