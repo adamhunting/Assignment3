@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace TimeSheet
 {
     //TODO: Handle Editing Hours
-    public enum TimeEntryTypes { SICK, VACATION, REGULAR }
+    public enum TimeEntryTypes { SICK, VACATION, REGULAR,
+        UNDEFINDED
+    }
     public struct TimeEntry
     {
       public TimeEntryTypes Type;
@@ -31,6 +33,12 @@ namespace TimeSheet
         private int _index = 0;
         private readonly int HoursPerDay = 24;
         private readonly int InvaildId = -1;
+        public static readonly TimeEntry DEFAULT = new TimeEntry
+        {
+            Hours = 0f,
+            Type = TimeEntryTypes.UNDEFINDED
+        };
+
         public Day(DateTime dateTime)
         {
             _entries = new List<TimeEntry>();
@@ -39,6 +47,10 @@ namespace TimeSheet
 
         public TimeEntry GetTimeEntry(int id)
         {
+            if(id >= _entries.Count || id < 0) 
+            {
+                return Day.DEFAULT;
+            }
             return _entries[id];
         }
 
@@ -57,6 +69,40 @@ namespace TimeSheet
             //TODO: Add equality methods to TimeEntry
             _entries.Insert(_index, timeEntry);
             return _index++;
+        }
+
+        public void UpdateTime(int id, TimeEntryTypes type, int hours, HourIncrement increment)
+        {
+            var timeEntry = new TimeEntry
+            {
+                Type = type,
+                Hours = hours + increment.Value
+            };
+            var sumOfHours = _entries.Sum(x => x.Hours) + timeEntry.Hours;
+            if (sumOfHours > HoursPerDay)
+            {
+                //TODO: Make error handling Consitant
+                throw new Exception("Hours Exceeded Max For Day");
+            }
+
+            //TODO: Add equality methods to TimeEntry
+            _entries.RemoveAt(id);
+            _entries.Insert(id, timeEntry);
+        }
+
+        public void DeleteTime(int id)
+        {
+            if (id > _index || id < 0)
+            {
+                return;
+            }
+            _entries.RemoveAt(id);
+
+        }
+
+        public void DeleteTime(TimeEntryTypes type)
+        {
+            _entries.RemoveAll(x => x.Type == type);
         }
 
         //public type TypeTest()

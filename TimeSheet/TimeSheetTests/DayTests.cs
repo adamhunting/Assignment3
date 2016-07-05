@@ -69,7 +69,7 @@ namespace TimeSheetTests
         }
 
         [TestMethod]
-        public void RecordTime_Hours_Returns_Negative_Value_When_Total_Hours_Grater_Than_24()
+        public void RecordTime_Returns_Negative_Value_When_Total_Hours_Grater_Than_24()
         {
             //Arragnge
             int expected = -1;
@@ -81,6 +81,59 @@ namespace TimeSheetTests
             //Assert
             Assert.AreEqual(expected, actual, "Expected Time ID To Be Negative");
         }
+
+        [TestMethod]
+        public void UpdateTime_Allows_Hours_Type_To_Change()
+        {
+            //Arragnge
+            var expected = new TimeEntry
+            {
+                Hours = 3.25f,
+                Type = TimeEntryTypes.REGULAR
+            };
+
+            var insertedId = _classUnderTest.RecordTime(TimeEntryTypes.VACATION, 4, HourIncrement.Half);
+
+            //Act
+            _classUnderTest.UpdateTime(insertedId, TimeEntryTypes.REGULAR, 3, HourIncrement.Quarter);
+            var actual = _classUnderTest.GetTimeEntry(insertedId);
+            //Assert
+            Assert.AreEqual(expected.Hours, actual.Hours, "Hours didn't update");
+            Assert.AreEqual(expected.Type, actual.Type, "Type didn't update");
+        }
+
+        [TestMethod]
+        public void DeleteTime_Allows_Time_To_Be_Removed_By_Id()
+        {
+            //Arragnge
+            var expected = Day.DEFAULT;
+
+            var insertedId = _classUnderTest.RecordTime(TimeEntryTypes.VACATION, 4, HourIncrement.Half);
+
+            //Act
+            _classUnderTest.DeleteTime(insertedId);
+            var actual = _classUnderTest.GetTimeEntry(insertedId);
+            //Assert
+            Assert.AreEqual(expected.Hours, actual.Hours, "Time Entry Didn't Delete");
+            Assert.AreEqual(expected.Type, actual.Type, "Time Entry Didn't Delete");
+        }
+
+        [TestMethod]
+        public void DeleteTime_Allows_Time_To_Be_Removed_By_Type()
+        {
+            //Arragnge
+            var expected = Day.DEFAULT;
+
+            var insertedId = _classUnderTest.RecordTime(TimeEntryTypes.VACATION, 4, HourIncrement.Half);
+
+            //Act
+            _classUnderTest.DeleteTime(TimeEntryTypes.VACATION);
+            var actual = _classUnderTest.GetTimeEntry(insertedId);
+            //Assert
+            Assert.AreEqual(expected.Hours, actual.Hours, "Time Entry Didn't Delete");
+            Assert.AreEqual(expected.Type, actual.Type, "Time Entry Didn't Delete");
+        }
+
 
         //[TestMethod]
         //public void TestDayRegular()
