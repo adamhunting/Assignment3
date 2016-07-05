@@ -11,6 +11,8 @@ namespace TimeSheet
     public struct TimeEntry
     {
       public TimeEntryTypes Type;
+
+        public float Hours { get;  set; }
     }
 
     public class Day
@@ -26,7 +28,9 @@ namespace TimeSheet
         //public type value = type.REGULAR;
         private DateTime _dateTime;
         private List<TimeEntry> _entries;
-
+        private int _index = 0;
+        private readonly int HoursPerDay = 24;
+        private readonly int InvaildId = -1;
         public Day(DateTime dateTime)
         {
             _entries = new List<TimeEntry>();
@@ -35,12 +39,24 @@ namespace TimeSheet
 
         public TimeEntry GetTimeEntry(int id)
         {
-            throw new NotImplementedException();
+            return _entries[id];
         }
 
-        public int RecordTime(TimeEntryTypes rEGULAR)
+        public int RecordTime(TimeEntryTypes type, int hours, HourIncrement increment)
         {
-            return 0;
+            var timeEntry = new TimeEntry {
+                Type = type,
+                Hours = hours + increment.Value
+            };
+            var sumOfHours = _entries.Sum(x => x.Hours)+timeEntry.Hours;
+            if(sumOfHours > HoursPerDay)
+            {
+                return InvaildId;
+            }
+
+            //TODO: Add equality methods to TimeEntry
+            _entries.Insert(_index, timeEntry);
+            return _index++;
         }
 
         //public type TypeTest()
