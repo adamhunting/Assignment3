@@ -5,91 +5,116 @@ using TimeSheet;
 namespace TimeSheetTests
 {
     [TestClass]
-    public class DayTestAlt
+    public class TestDay
     {
-        [TestMethod]
-        public void TestDayRegular()
+        private Day _classUnderTest;
+
+        [TestInitialize]
+        public void SetUp()
         {
-            /*
-             * Done***How do I enter time for a day
-             *
-             * Pass(Testing stuff that's supposed to succeed)
-             * Done***Simplest is 8 hours regular
-             * @@@Trick: Do this to do this
-             * @@@Learn: You can do blah blah to do this
-             * 8 hours sick
-             * 24 hours regular
-             * 
-             * Fail(Testing stuff that's supposed to fail)
-             * -1 hours regular, 0 fails too
-             * 21 hours regular and 5 hours sick
-             * 
-             */
-
-            //arrange
-            Day d = new Day(new DateTime(2016, 5, 28));
-
-            //act
-            d.Add(Day.type.REGULAR, 8);
-
-            //assert
-            Assert.IsTrue(d.Validate());
+            var date = new DateTime(2016, 7, 4);
+            _classUnderTest = new Day(date);
+            
         }
-        [TestMethod]
-        public void TestDaySick()
+
+        [TestCleanup]
+        public void CleanUp()
         {
-            //arrange
-            Day d = new Day(new DateTime(2016, 5, 28));
-
-            //act
-            d.Add(Day.type.SICK, 24);
-
-            //assert
-            Assert.IsTrue(d.Validate());
+            
         }
+
         [TestMethod]
-        public void TestDayOver25()
+        public void RecordTime_Allows_Regular_Catagory_Time_Entries()
         {
-            //arrange
-            Day d = new Day(new DateTime(2016, 6, 28));
-
-            //act
-            d.Add(Day.type.REGULAR, 21);
-            d.Add(Day.type.SICK, 5);
-
-            //assert
-            Assert.IsFalse(d.Validate());
-        }
-        [TestMethod]
-        public void TestBelow0()
-        {
-            //arrange
-            Day d = new Day(new DateTime(2016, 6, 28));
-
-            //act
-            try
+            //Arrange
+            var expected = new TimeEntry()
             {
-                d.Add(Day.type.REGULAR, -1);
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                Assert.IsInstanceOfType(e, typeof(ArgumentOutOfRangeException));
-            }
-
-            //assert
-            Assert.IsTrue(d.Validate());
+                Type = TimeEntryTypes.REGULAR
+            };
+            //ACT
+            var id = _classUnderTest.RecordTime(TimeEntryTypes.REGULAR);
+            var actual = _classUnderTest.GetTimeEntry(id);
+            //Assert
+            Assert.AreEqual(expected.Type, actual.Type, "Time Entry Types Don't Match");
         }
-        [TestMethod]
-        public void Test0()
-        {
-            //arrange
-            Day d = new Day(new DateTime(2016, 6, 28));
 
-            //act
-            d.Add(Day.type.REGULAR, 0);
 
-            //assert
-            Assert.IsTrue(d.Validate());
-        }
+        //[TestMethod]
+        //public void TestDayRegular()
+        //{
+        //    /*
+        //     * 
+        //     */
+
+        //    //arrange
+        //    Day d = new Day(new DateTime(2016, 5, 28));
+
+        //    //act
+        //    d.Add(Day.type.REGULAR, 8);
+
+        //    //assert
+        //    Assert.IsTrue(d.Validate());
+        //}
+
+        //[TestMethod]
+        //public void TestDaySick()
+        //{
+        //    //arrange
+        //    Day d = new Day(new DateTime(2016, 5, 28));
+
+        //    //act
+        //    d.Add(Day.type.SICK, 24);
+
+        //    //assert
+        //    Assert.IsTrue(d.Validate());
+        //}
+
+        //[TestMethod]
+        //public void TestDayOver25()
+        //{
+        //    //arrange
+        //    Day d = new Day(new DateTime(2016, 6, 28));
+
+        //    //act
+        //    d.Add(Day.type.REGULAR, 21);
+        //    d.Add(Day.type.SICK, 5);
+
+        //    //assert
+        //    Assert.IsFalse(d.Validate());
+        //}
+
+
+        //[TestMethod]
+        //public void TestBelow0()
+        //{
+        //    //arrange
+        //    Day d = new Day(new DateTime(2016, 6, 28));
+
+        //    //act
+        //    try
+        //    {
+        //        d.Add(Day.type.REGULAR, -1);
+        //    }
+        //    catch (ArgumentOutOfRangeException e)
+        //    {
+        //        Assert.IsInstanceOfType(e, typeof(ArgumentOutOfRangeException));
+        //    }
+
+        //    //assert
+        //    Assert.IsTrue(d.Validate());
+        //}
+
+        //[TestMethod]
+        //public void Test0()
+        //{
+        //    //arrange
+        //    Day d = new Day(new DateTime(2016, 6, 28));
+
+        //    //act
+        //    d.Add(Day.type.REGULAR, 0);
+
+        //    //assert
+        //    Assert.IsTrue(d.Validate());
+        //}
     }
 }
