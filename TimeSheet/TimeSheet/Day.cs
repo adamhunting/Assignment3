@@ -45,6 +45,11 @@ namespace TimeSheet
             _dateTime = dateTime;
         }
 
+        public DateTime GetDaysDate()
+        {
+            return _dateTime ;
+        }
+
         public TimeEntry GetTimeEntry(int id)
         {
             if(id >= _entries.Count || id < 0) 

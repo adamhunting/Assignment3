@@ -27,13 +27,17 @@ namespace TimeSheetTests
         public void Init_Creates_Two_Week_Of_Consecutive_Days()
         {
             //Arrange
-           // var expeceted = 14;
+            DateTime s = new DateTime(2016, 1, 1);
+            DateTime e = new DateTime(2016, 1, 14);
+            TimeCard t = new TimeCard(s,e);
+            var expected = 13;
 
             //ACT
-           // var actual =
-
-
+            var startDay = t.GetStartDay();
+            var lastDay = t.GetLastDay();
+            var actual =    (lastDay.GetDaysDate() - startDay.GetDaysDate()).Days;
             //Assert
+            Assert.AreEqual(expected, actual);
         }
 
 
