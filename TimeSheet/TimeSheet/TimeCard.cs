@@ -14,15 +14,11 @@ namespace TimeSheet
         public TimeCard(DateTime startDate, DateTime endDate )
         {
             DateTime _startDate = startDate;
-         // int start = startDate.Day;
-          //int end = endDate.Day;
           _days = new Day[14];
-          int x = 0;
-          while (x <14)
-            {  //TODO:Fix first day in array
+          for (int x =0; x < 14; x++)
+            {  
                 Day day = new Day(_startDate.AddDays(x));
-                _days[x] = day;
-                x++;
+                _days[x] = day;               
             }
         }
         public Day[] GetDays()
