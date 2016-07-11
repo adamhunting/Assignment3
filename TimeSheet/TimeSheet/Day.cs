@@ -59,6 +59,12 @@ namespace TimeSheet
             return _entries[id];
         }
 
+        public IEnumerable<TimeEntry> AllEntries {
+            get
+            {
+                return _entries.Select(x=>x);
+            }
+        }
         public int RecordTime(TimeEntryTypes type, int hours, HourIncrement increment)
         {
             var timeEntry = new TimeEntry {
@@ -70,7 +76,6 @@ namespace TimeSheet
             {
                 return InvaildId;
             }
-
             //TODO: Add equality methods to TimeEntry
             _entries.Insert(_index, timeEntry);
             return _index++;
